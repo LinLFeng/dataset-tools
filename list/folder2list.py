@@ -8,17 +8,17 @@ from random import shuffle
 from tqdm import tqdm
 
 
-def generator(raw_dir, target_dir, class_codes, train_proportion=0.8, val_proportion=0.2):
+def generator(input_dir, output_dir, class_codes, train_proportion=0.8, val_proportion=0.2):
     all_images = []
-    dataset_dir = os.path.join(target_dir, "dataset")
+    dataset_dir = os.path.join(output_dir, "dataset")
 
     # 删除原dataset文件夹
     if os.path.exists(dataset_dir):
         shutil.rmtree(dataset_dir)
 
     # 遍历根文件夹下的所有分类文件夹
-    for class_folder in os.listdir(raw_dir):
-        folder_path = os.path.join(raw_dir, class_folder)
+    for class_folder in os.listdir(input_dir):
+        folder_path = os.path.join(input_dir, class_folder)
         # 遍历该分类文件夹下所有文件
         for image_filename in os.listdir(folder_path):
             img_path = os.path.join(folder_path, image_filename)
@@ -33,24 +33,26 @@ def generator(raw_dir, target_dir, class_codes, train_proportion=0.8, val_propor
     os.mkdir(os.path.join(dataset_dir, "val"))
     os.mkdir(os.path.join(dataset_dir, "test"))
 
-    train_list = open(os.path.join(dataset_dir, "train_list.txt"), "a")
-    val_list = open(os.path.join(dataset_dir, "val_list.txt"), "a")
-    test_list = open(os.path.join(dataset_dir, "test_list.txt"), "a")
+    train_file = open(os.path.join(dataset_dir, "train_list.txt"), "a")
+    val_file = open(os.path.join(dataset_dir, "val_list.txt"), "a")
+    test_file = open(os.path.join(dataset_dir, "test_list.txt"), "a")
 
-    train_index = round(len(all_images) * train_proportion)
-    val_index = round(len(all_images) * val_proportion)
+    train_set_num = round(len(all_images) * train_proportion)
+    val_set_num = round(len(all_images) * val_proportion)
 
     for i in tqdm(range(len(all_images))):
-        if i < train_index:
+        if i < train_set_num:
             copy_type = "train"
-            file = train_list
-        elif train_index <= i <= train_index + val_index:
+            file = train_file
+        elif train_set_num <= i <= train_set_num + val_set_num:
             copy_type = "val"
-            file = val_list
+            file = val_file
         else:
             copy_type = "test"
-            file = test_list
-        shutil.copy(all_images[i][0], os.path.join(dataset_dir, copy_type))
+            file = test_file
+        shutil.copy(
+            all_images[i][0],
+            os.path.join(dataset_dir, copy_type))
         file.write(
             copy_type
             + "/"
@@ -58,13 +60,13 @@ def generator(raw_dir, target_dir, class_codes, train_proportion=0.8, val_propor
             + " "
             + class_codes[all_images[i][1]] + "\n")
 
-    train_list.close()
-    val_list.close()
-    test_list.close()
+    train_file.close()
+    val_file.close()
+    test_file.close()
 
-    print(f"train set {train_index}")
-    print(f"val   set {val_index}")
-    print(f"test  set {len(all_images) - (train_index + val_index)}")
+    print(f"train set {train_set_num}")
+    print(f"val   set {val_set_num}")
+    print(f"test  set {len(all_images) - (train_set_num + val_set_num)}")
 
 
 if __name__ == "__main__":
@@ -87,8 +89,8 @@ if __name__ == "__main__":
     val_p = 0.2
 
     generator(
-        raw_dir=dir1,
-        target_dir=dir2,
+        input_dir=dir1,
+        output_dir=dir2,
         class_codes=class_dict,
         train_proportion=train_p,
         val_proportion=val_p,
