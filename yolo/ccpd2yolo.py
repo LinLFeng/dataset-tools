@@ -39,7 +39,7 @@ def work_process(filedir: str, filename, output_image_dir, output_label_dir):
         shutil.move(filedir, img_file)
 
 
-def process_image(input_dir, output_dir):
+def main_process(input_dir, output_dir):
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
 
@@ -63,4 +63,4 @@ if __name__ == "__main__":
     data_path = r"C:\\Users\\LIN_L\\Project\\datasets\\CCPD2019\\ccpd_weather"
     save_path = r"C:\\Users\\LIN_L\\Project\\datasets\\CCPD2019_YOLO\\ccpd_weather"
 
-    process_image(input_dir=data_path, output_dir=save_path)
+    main_process(input_dir=data_path, output_dir=save_path)
