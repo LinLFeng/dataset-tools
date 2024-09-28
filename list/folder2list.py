@@ -9,7 +9,11 @@ from utils.progress import Progress
 
 
 def generator(
-    input_dir, output_dir, class_codes, train_proportion=0.8, val_proportion=0.2
+        input_dir,
+        output_dir,
+        class_codes,
+        train_proportion=0.8,
+        val_proportion=0.2
 ):
     all_images = []
     dataset_dir = os.path.join(output_dir, "dataset")
