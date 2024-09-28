@@ -5,10 +5,12 @@
 import os
 import shutil
 from random import shuffle
-from tqdm import tqdm
+from utils.progress import Progress
 
 
-def generator(input_dir, output_dir, class_codes, train_proportion=0.8, val_proportion=0.2):
+def generator(
+    input_dir, output_dir, class_codes, train_proportion=0.8, val_proportion=0.2
+):
     all_images = []
     dataset_dir = os.path.join(output_dir, "dataset")
 
@@ -40,7 +42,7 @@ def generator(input_dir, output_dir, class_codes, train_proportion=0.8, val_prop
     train_set_num = round(len(all_images) * train_proportion)
     val_set_num = round(len(all_images) * val_proportion)
 
-    for i in tqdm(range(len(all_images))):
+    for i in Progress(range(len(all_images))):
         if i < train_set_num:
             copy_type = "train"
             file = train_file
@@ -50,15 +52,15 @@ def generator(input_dir, output_dir, class_codes, train_proportion=0.8, val_prop
         else:
             copy_type = "test"
             file = test_file
-        shutil.copy(
-            all_images[i][0],
-            os.path.join(dataset_dir, copy_type))
+        shutil.copy(all_images[i][0], os.path.join(dataset_dir, copy_type))
         file.write(
             copy_type
             + "/"
             + os.path.split(all_images[i][0])[1]
             + " "
-            + class_codes[all_images[i][1]] + "\n")
+            + class_codes[all_images[i][1]]
+            + "\n"
+        )
 
     train_file.close()
     val_file.close()
