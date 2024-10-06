@@ -1,9 +1,9 @@
 import time
-from utils.log import normal_log, process_log
+from utils.log import log
 
 
 class Progress:
-    def __init__(self, data, model="progress", title="progress"):
+    def __init__(self, data, model="progress", title="progress", level=0):
         # 可迭代数据
         self._data = data
         # 索引
@@ -14,6 +14,8 @@ class Progress:
         self._title = title
         # 进度更新时间
         self._last_update = time.time()
+        # 进度等级
+        self._level = level
 
     def __iter__(self):
         return self
@@ -27,17 +29,17 @@ class Progress:
                 # 更新时间
                 self._last_update = now
                 statistics = f"{self._title} [done {self._data_idx}] / [total {len(self._data)}]"
-                process_log(
-                    module=self._model,
+                log(module=self._model,
                     msg=statistics,
-                    end="",
-                    flush=True)
+                    flush=True,
+                    level=self._level,
+                    end="")
             return item
         else:
             # 结束后确保是 100%
             statistics = f"{self._title} [done {len(self._data)}] / [total {len(self._data)}]"
-            process_log(
-                module=self._model,
+            log(module=self._model,
                 msg=statistics,
-                flush=True)
+                flush=True,
+                level=self._level)
             raise StopIteration()
