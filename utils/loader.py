@@ -36,7 +36,9 @@ class BaseLoader:
 
             # 单文件夹扫描
             if file_scan_loop == -1 and len(sub_dir) == 0:
-                self.__data["only"] = files
+                folder_name = os.path.basename(path)
+                self.__data["load"][folder_name] = files
+                self.__data["load_dirs"].append(folder_name)
                 files_num += len(files)
                 break
             # 多文件夹扫描
@@ -97,8 +99,12 @@ class BaseLoader:
             for k in self.__data["load_dirs"]:
                 v = self.__data["load"][k]
                 cut_index = round(len(v) * prop)
-                self.__data["load"][k] = v[:cut_index]
-        process_log("Loader", "file cut complete")
+                cut_data = v[:cut_index]
+                self.__data["load"][k] = cut_data
+                normal_log("Loader", f"Number of {k} remaining - {len(cut_data)}")
+            process_log("Loader", "file cut complete")
+        else:
+            warning_log("Loader", f"Invalid value {prop}")
 
     # 数据乱序
     def shuffle(self):
