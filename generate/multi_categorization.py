@@ -1,7 +1,7 @@
 import os
-from utils.loader import BaseLoader
+from utils.fileloader.MultiLoader import MultiLoader
 from utils.progress import Progress
-from utils.log import normal_log, process_log
+from utils.log import log
 
 
 def multi_categorization(
@@ -12,8 +12,8 @@ def multi_categorization(
         folder_code=None,
         shuffle=False,
 ):
-    process_log("multi_categorization", "build start")
-    folders_loader = BaseLoader()
+    log("multi_categorization", "build start", level=1)
+    folders_loader = MultiLoader()
     folders_loader.load(path, folder_code=folder_code)
     if shuffle:
         folders_loader.shuffle()
@@ -22,7 +22,7 @@ def multi_categorization(
     folders_loader.split(train_prop=train_prop, val_prop=val_prop)
 
     # TODO: 原始数据集精简功能
-    image = folders_loader.get_data()
+    image = folders_loader.get()
 
     for file_name in ["train", "val", "test"]:
         with open(os.path.join(path, f"{file_name}_list.txt"), "a") as file:
@@ -30,7 +30,7 @@ def multi_categorization(
                               model="multi_categorization",
                               title=f"{file_name}_list.txt building"):
                 file.write(f"{j}\n")
-    process_log("multi_categorization", "build complete")
+    log("multi_categorization", "build complete", level=1)
 
 
 if __name__ == "__main__":
