@@ -1,4 +1,5 @@
 import time
+from utils.log import normal_log, process_log
 
 
 class Progress:
@@ -23,12 +24,11 @@ class Progress:
             if now - self._last_update > 0.3:
                 # 更新时间
                 self._last_update = now
-                # 计算比例
-                statistics = f"[{self._text} - [done {self._data_idx}] / [total {len(self._data)}]]"
-                print(f"\r{statistics}", end="", flush=True)
+                statistics = f"[done {self._data_idx}] / [total {len(self._data)}]"
+                process_log(self._text, statistics, end="", flush=True)
             return item
         else:
             # 结束后确保是 100%
-            statistics = f"[{self._text} - [done {len(self._data)}] / [total {len(self._data)}]] Done"
-            print(f"\r{statistics}", end="\n", flush=True)
+            statistics = f"[done {len(self._data)}] / [total {len(self._data)}]"
+            process_log(self._text, statistics, flush=True)
             raise StopIteration()
