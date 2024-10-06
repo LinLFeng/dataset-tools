@@ -12,20 +12,11 @@
 
 ### 项目介绍
 
-- convert 数据转换功能模块
-    - ccpd.py
-        - CCPD2019数据集 生成 yolo标签 ocr标签
-    - dataset_cut.py
-        - 以目录分类的数据集 生成 train/val/test_list.txt
-
-- generate 生成功能模块 
+- generate 生成 功能模块
     - multi_categorization.py
         - 以目录分类的数据集 生成 train/val/test_list.txt
 
 - utils 工具集模块
-
-    - fileloader.py 文件加载功能
-    - progress.py 进度显示功能
 
 ## 2 快速使用
 
@@ -40,7 +31,7 @@ python3.x 版本
 
 ### 运行
 
-修改 convert/你需要的功能.py 中的参数  
+修改 generate/你需要的功能.py 中的参数  
 修改后直接运行即可
 
 
