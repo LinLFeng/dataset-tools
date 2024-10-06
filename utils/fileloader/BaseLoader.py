@@ -7,27 +7,27 @@ from utils.progress import Progress
 class BaseLoader:
     def __init__(self):
         # 文件路径
-        self.__path = ""
+        self._path = ""
         # 数据是否被划分
-        self.__spilt_status = False
+        self._spilt_status = False
         # 划分数据保存位置
-        self.__spilt = {
+        self._spilt = {
             "train": [],
             "val": [],
             "test": []
         }
         # 原始数据保存位置
-        self.__data = {}
+        self._data = {}
 
     def list_file_clean(self, files):
         # 清空根目录下xxx_list.txt文件
         for file in files:
             if file in ["train_list.txt", "val_list.txt", "test_list.txt"]:
-                os.remove(f"{self.__path}/{file}")
+                os.remove(f"{self._path}/{file}")
 
     # 读取数据
     def load(self, path: str):
-        self.__path = path
+        self._path = path
         scan_loop = -1
         folder_names = []
         for path, sub_dir, files in os.walk(path):
@@ -35,7 +35,7 @@ class BaseLoader:
             if scan_loop == -1 and len(sub_dir) == 0:
                 folder_name = os.path.basename(path)
                 # 更新数据
-                self.__data[folder_name] = files
+                self._data[folder_name] = files
                 # 更新文件夹名
                 folder_names.append(folder_name)
                 msg = f"folder-name={folder_name} num={len(files)}"
@@ -51,7 +51,7 @@ class BaseLoader:
             # 第二轮起
             else:
                 folder_name = folder_names[scan_loop]
-                self.__data[folder_name] = files
+                self._data[folder_name] = files
 
                 msg = f"folder-name={folder_name} num={len(files)}"
                 log("Loader", msg, level=0)
@@ -62,17 +62,17 @@ class BaseLoader:
 
     # 获取数据
     def get(self):
-        if self.__spilt_status:
-            return self.__data
+        if self._spilt_status:
+            return self._spilt
         else:
-            return self.__spilt
+            return self._data
 
     # 数据选取
     def cut(self, prop=0.8):
         if 0 <= prop <= 1:
-            for k, v in self.__data.items():
+            for k, v in self._data.items():
                 v = v[:round(len(v) * prop)]
-                self.__data[k] = v
+                self._data[k] = v
                 log("Loader", f"Number of {k} remaining - {len(v)}", level=0)
 
             log("Loader", "file cut complete", level=1)
@@ -81,8 +81,8 @@ class BaseLoader:
 
     # 数据乱序
     def shuffle(self):
-        for k in self.__data.keys():
-            shuffle(self.__data[k])
+        for k in self._data.keys():
+            shuffle(self._data[k])
         log("Loader", "file shuffle complete", level=1)
 
     # 数据划分
@@ -93,17 +93,17 @@ class BaseLoader:
             train_prop = 0.8
             val_prop = 0.2
 
-        for k in self.__data.keys():
-            v = self.__data[k]
+        for k in self._data.keys():
+            v = self._data[k]
             train_index = len(v) * train_prop
             val_index = len(v) * val_prop + train_index
 
             for index in Progress(range(len(v)), model="Loader", title=f"folder {k} split"):
                 if index < train_index:
-                    self.__spilt["train"].append(f"{k}/{v[index]}")
+                    self._spilt["train"].append(f"{k}/{v[index]}")
                 elif train_index <= index <= val_index:
-                    self.__spilt["val"].append(f"{k}/{v[index]}")
+                    self._spilt["val"].append(f"{k}/{v[index]}")
                 else:
-                    self.__spilt["test"].append(f"{k}/{v[index]}")
-        self.__spilt_status = True
+                    self._spilt["test"].append(f"{k}/{v[index]}")
+        self._spilt_status = True
         log("Loader", "file split complete", level=1)
