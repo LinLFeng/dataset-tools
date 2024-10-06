@@ -105,4 +105,5 @@ class BaseLoader:
                     self.__spilt["val"].append(f"{k}/{v[index]}")
                 else:
                     self.__spilt["test"].append(f"{k}/{v[index]}")
+        self.__spilt_status = True
         log("Loader", "file split complete", level=1)
