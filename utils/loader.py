@@ -37,6 +37,7 @@ class BaseLoader:
             # 单文件夹扫描
             if file_scan_loop == -1 and len(sub_dir) == 0:
                 self.__data["only"] = files
+                files_num += len(files)
                 break
             # 多文件夹扫描
             # 第一轮
