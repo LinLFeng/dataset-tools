@@ -13,6 +13,7 @@ def multi_categorization(
         shuffle=False,
 ):
     log("multi_categorization", "build start", level=1)
+
     folders_loader = MultiLoader()
     folders_loader.load(path, folder_code=folder_code)
     if shuffle:
@@ -20,8 +21,6 @@ def multi_categorization(
     if cut_prop != 0:
         folders_loader.cut(cut_prop)
     folders_loader.split(train_prop=train_prop, val_prop=val_prop)
-
-    # TODO: 原始数据集精简功能
     image = folders_loader.get()
 
     for file_name in ["train", "val", "test"]:
@@ -30,6 +29,7 @@ def multi_categorization(
                               model="multi_categorization",
                               title=f"{file_name}_list.txt building"):
                 file.write(f"{j}\n")
+
     log("multi_categorization", "build complete", level=1)
 
 
