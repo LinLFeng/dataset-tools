@@ -16,6 +16,7 @@ class BaseLoader:
             "val": [],
             "test": []
         }
+        self._one_folder = False
         # 原始数据保存位置
         self._data = {}
 
@@ -36,8 +37,7 @@ class BaseLoader:
                 folder_name = os.path.basename(path)
                 # 更新数据
                 self._data[folder_name] = files
-                # 更新文件夹名
-                folder_names.append(folder_name)
+                self._one_folder = True
                 msg = f"folder-name={folder_name} num={len(files)}"
                 log("Loader", msg, level=0)
                 break
@@ -100,10 +100,15 @@ class BaseLoader:
 
             for index in Progress(range(len(v)), module="Loader", title=f"folder {k} split"):
                 if index < train_index:
-                    self._spilt["train"].append(f"{k}/{v[index]}")
+                    spilt_key = "train"
                 elif train_index <= index <= val_index:
-                    self._spilt["val"].append(f"{k}/{v[index]}")
+                    spilt_key = "val"
                 else:
-                    self._spilt["test"].append(f"{k}/{v[index]}")
+                    spilt_key = "test"
+                if self._one_folder:
+                    append_value = f"{v[index]}"
+                else:
+                    append_value = f"{k}/{v[index]}"
+                self._spilt[spilt_key].append(append_value)
         self._spilt_status = True
         log("Loader", "file split complete", level=1)
