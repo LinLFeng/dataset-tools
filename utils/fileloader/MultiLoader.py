@@ -1,4 +1,3 @@
-import os
 from utils.log import log
 from utils.progress import Progress
 from utils.fileloader.BaseLoader import BaseLoader
@@ -9,16 +8,14 @@ class MultiLoader(BaseLoader):
         BaseLoader.__init__(self)
         self._folder_code = {}
 
-    # 默认文件夹编号
-    def __default_folder_code(self):
+    def default_folder_code(self):
         index = 0
         for i in self._data.keys():
             self._folder_code[i] = index
             index += 1
         log("Loader", "default folder code upload", level=1)
 
-    # 自定义文件夹编号
-    def __folder_code_upload(self, folder_code):
+    def folder_code_upload(self, folder_code):
         data_keys = [key for key in self._data.keys()]
         folder_code_keys = [key for key in folder_code.keys()]
         for i in folder_code_keys:
@@ -32,9 +29,9 @@ class MultiLoader(BaseLoader):
     def load(self, path: str, folder_code=None):
         BaseLoader.load(self, path)
         if folder_code is not None:
-            self.__folder_code_upload(folder_code)
+            self.folder_code_upload(folder_code)
         else:
-            self.__default_folder_code()
+            self.default_folder_code()
 
     def split(self, train_prop, val_prop):
         if train_prop + val_prop > 1:
