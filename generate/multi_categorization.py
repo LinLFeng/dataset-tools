@@ -12,8 +12,6 @@ def multi_categorization(
         folder_code=None,
         shuffle=False,
 ):
-    log("multi_categorization", "build start", level=1)
-
     folders_loader = MultiLoader()
     folders_loader.load(path, folder_code=folder_code)
     if shuffle:
