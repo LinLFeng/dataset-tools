@@ -26,7 +26,7 @@ def multi_categorization(
     for file_name in ["train", "val", "test"]:
         with open(os.path.join(path, f"{file_name}_list.txt"), "a") as file:
             for j in Progress(image[file_name],
-                              model="multi_categorization",
+                              module="multi_categorization",
                               title=f"{file_name}_list.txt building"):
                 file.write(f"{j}\n")
 

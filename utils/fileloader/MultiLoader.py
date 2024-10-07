@@ -40,7 +40,7 @@ class MultiLoader(BaseLoader):
             train_prop = 0.8
             val_prop = 0.2
         for k in Progress([key for key in self._data.keys()],
-                          model="Loader",
+                          module="Loader",
                           title="data split",
                           level=0):
             v = self._data[k]

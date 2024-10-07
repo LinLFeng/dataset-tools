@@ -98,7 +98,7 @@ class BaseLoader:
             train_index = len(v) * train_prop
             val_index = len(v) * val_prop + train_index
 
-            for index in Progress(range(len(v)), model="Loader", title=f"folder {k} split"):
+            for index in Progress(range(len(v)), module="Loader", title=f"folder {k} split"):
                 if index < train_index:
                     self._spilt["train"].append(f"{k}/{v[index]}")
                 elif train_index <= index <= val_index:

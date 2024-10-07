@@ -3,13 +3,13 @@ from utils.log import log
 
 
 class Progress:
-    def __init__(self, data, model="progress", title="progress", level=0):
+    def __init__(self, data, module="progress", title="progress", level=0):
         # 可迭代数据
         self._data = data
         # 索引
         self._data_idx = 0
         # 所在模块
-        self._model = model
+        self._module = module
         # 进度标题
         self._title = title
         # 进度更新时间
@@ -29,7 +29,7 @@ class Progress:
                 # 更新时间
                 self._last_update = now
                 statistics = f"{self._title} [done {self._data_idx}] / [total {len(self._data)}]"
-                log(module=self._model,
+                log(module=self._module,
                     msg=statistics,
                     flush=True,
                     level=self._level,
@@ -38,7 +38,7 @@ class Progress:
         else:
             # 结束后确保是 100%
             statistics = f"{self._title} [done {len(self._data)}] / [total {len(self._data)}]"
-            log(module=self._model,
+            log(module=self._module,
                 msg=statistics,
                 flush=True,
                 level=self._level)
