@@ -21,7 +21,7 @@ def log(module, msg, flush=False, end="\n", level=0):
     elif level == 2:
         message += WARN + " [WARN] "
     elif level == 3:
-        message += ERROR + " [ERROR]"
+        message += ERROR + " [ERROR] "
     message += f" [{module}] "
     message += msg
     message += RESET
